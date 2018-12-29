@@ -35,7 +35,6 @@
           <div class="item">{{notTodos[2]}}</div>
         </div>
       </div>
-      <div class="state">copyright@不谷 染竹</div>
     </div>
 </template>
 
@@ -91,15 +90,14 @@ export default {
     },
     getJsonData: function () {
       this.getDate()
-      let myNum = this.getRandom(0, 6)
       for (var i = 0 ; ; i++){
-        if (this.randomNum.length >= 6) {
+        if (this.randomNum.length >= 3) {
           break
         } else {
           this.generateRandom()
         }
       }
-      let promise = this.$http.get('../../static/mysuitData.json').then((response) => {
+      let promise = this.$http.get('/static/mysuitData.json').then((response) => {
         console.log(this.randomNum)
         this.randomThings = response.data
         for(let i = 0; i < 3; i++) {
@@ -108,7 +106,7 @@ export default {
         }
         this.isShow = true
       })
-      let promise1 = this.$http.get('../../static/notsuitData.json').then((response) => {
+      let promise1 = this.$http.get('/static/notsuitData.json').then((response) => {
         console.log(this.todos)
         this.randomThings1 = response.data
         for(let i = 0; i < 3; i++) {
@@ -120,21 +118,23 @@ export default {
     getTodayContent: function () {
       let sort = Math.ceil((new Date() - new Date(new Date().getFullYear().toString())) / (24 * 60 * 60 * 1000)) + 1
       console.log(sort)
-      this.$http.get('../../static/contentData.json').then((response) => {
+      this.$http.get('/static/contentData.json').then((response) => {
         this.isShowConetent = true
         this.todayContent = response.data[sort].content
+        console.log(response.data[sort])
       })
       return sort
     },
     // 生成随机数
      generateRandom: function(){
-      let rand = this.getRandom(0, 6)
+      let rand = this.getRandom(0, 45)
       for (let i = 0 ; i < this.randomNum.length; i++){
         if(this.randomNum[i] === rand){
         return false
         }
       }
        this.randomNum.push(rand)
+       console.log(this.randomNum)
     },
     // 农历转化
     getLunarDate: function (date) {
@@ -260,11 +260,13 @@ export default {
   .bottomLfet {
     width: 50%;
     height: 180px;
+    border:1px solid #000;
   }
   .bottomRight {
     width: 50%;
     height: 180px;
-    background-color: #6699CC;
+    /*background-color: #6699CC;*/
+    border: 1px solid;
   }
   .myday {
     font-size: 80px;
@@ -278,6 +280,7 @@ export default {
     width: 400px;
     height: 500px;
     margin:0 auto;
+    border:5px solid #000;
   }
   .state {
     height: 20px;
