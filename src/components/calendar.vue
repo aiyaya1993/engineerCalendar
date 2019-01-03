@@ -123,7 +123,7 @@ export default {
       }
 
 
-      let promise = this.$http.get('/static/mysuitData.json').then((response) => {
+      let promise = this.$http.get('./static/mysuitData.json').then((response) => {
         console.log(this.randomNum)
         this.randomThings = response.data
         for(let i = 0; i < 3; i++) {
@@ -134,7 +134,7 @@ export default {
         }
         this.isShow = true
       })
-      let promise1 = this.$http.get('/static/notsuitData.json').then((response) => {
+      let promise1 = this.$http.get('./static/notsuitData.json').then((response) => {
         console.log(this.todos)
         this.randomThings1 = response.data
         for(let i = 0; i < 3; i++) {
@@ -154,7 +154,7 @@ export default {
     getTodayContent: function () {
       let sort = Math.ceil((new Date() - new Date(new Date().getFullYear().toString())) / (24 * 60 * 60 * 1000)) + 1
       console.log(sort)
-      this.$http.get('/static/contentData.json').then((response) => {
+      this.$http.get('./static/contentData.json').then((response) => {
         this.isShowConetent = true
         this.todayContent = response.data[sort].content
         console.log(response.data[sort])
