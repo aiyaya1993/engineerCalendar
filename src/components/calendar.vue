@@ -45,6 +45,7 @@ export default {
     return {
       msg: '程序员日历',
       randomNum: [],
+      randomNum1: [],
       randomThings: {},
       randomThings1: {},
       todos: [],
@@ -77,18 +78,34 @@ export default {
     dateNum: 'getJsonData'
   },
   methods: {
+    // 获取范围内的随机数
     getRandom: function (min, max) {
       let num = Math.round(Math.random() * (max - min) + min)
       return num
     },
-    getDate: function () {
-      let myDate = new Date()
-      this.dateNum.year = myDate.getFullYear()
-      this.dateNum.month = myDate.getMonth() + 1
-      this.dateNum.day = myDate.getDate()
-      this.dateNum.dayNo = myDate.getDay()
+    // 生成宜随机数
+    generateRandom: function(){
+      let rand = this.getRandom(0, 43)
+      for (let i = 0 ; i < this.randomNum.length; i++){
+        if(this.randomNum[i] === rand){
+          return false
+        }
+      }
+      this.randomNum.push(rand)
+      console.log(this.randomNum)
+    },
+    generateRandom1: function(){
+      let rand = this.getRandom(0, 9)
+      for (let i = 0 ; i < this.randomNum.length; i++){
+        if(this.randomNum1[i] === rand){
+          return false
+        }
+      }
+      this.randomNum1.push(rand)
+      console.log(this.randomNum1)
     },
     getJsonData: function () {
+      // 获取年月日
       this.getDate()
       for (var i = 0 ; ; i++){
         if (this.randomNum.length >= 3) {
@@ -97,10 +114,21 @@ export default {
           this.generateRandom()
         }
       }
+      for (var i = 0 ; ; i++){
+        if (this.randomNum1.length >= 3) {
+          break
+        } else {
+          this.generateRandom1()
+        }
+      }
+
+
       let promise = this.$http.get('/static/mysuitData.json').then((response) => {
         console.log(this.randomNum)
         this.randomThings = response.data
         for(let i = 0; i < 3; i++) {
+          console.log('this.randomNum1[i]')
+          console.log(this.randomNum[i])
           this.todos.push(this.randomThings[this.randomNum[i]].todo)
           // this.notTodos.push(this.randomThings[this.randomNum[i]].notodo)
         }
@@ -110,11 +138,19 @@ export default {
         console.log(this.todos)
         this.randomThings1 = response.data
         for(let i = 0; i < 3; i++) {
-            this.notTodos.push(this.randomThings1[this.randomNum[i]].notodo)
+          this.notTodos.push(this.randomThings1[this.randomNum1[i]].notodo)
         }
         this.isShow = true
       })
     },
+    getDate: function () {
+      let myDate = new Date()
+      this.dateNum.year = myDate.getFullYear()
+      this.dateNum.month = myDate.getMonth() + 1
+      this.dateNum.day = myDate.getDate()
+      this.dateNum.dayNo = myDate.getDay()
+    },
+
     getTodayContent: function () {
       let sort = Math.ceil((new Date() - new Date(new Date().getFullYear().toString())) / (24 * 60 * 60 * 1000)) + 1
       console.log(sort)
@@ -125,17 +161,7 @@ export default {
       })
       return sort
     },
-    // 生成随机数
-     generateRandom: function(){
-      let rand = this.getRandom(0, 45)
-      for (let i = 0 ; i < this.randomNum.length; i++){
-        if(this.randomNum[i] === rand){
-        return false
-        }
-      }
-       this.randomNum.push(rand)
-       console.log(this.randomNum)
-    },
+
     // 农历转化
     getLunarDate: function (date) {
 
