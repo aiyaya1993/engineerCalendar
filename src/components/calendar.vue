@@ -156,7 +156,7 @@ export default {
       console.log(sort)
       this.$http.get('./static/contentData.json').then((response) => {
         this.isShowConetent = true
-        this.todayContent = response.data[sort].content
+        this.todayContent = response.data[sort-1].content
         console.log(response.data[sort])
       })
       return sort
